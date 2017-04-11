@@ -17,7 +17,7 @@ typedef struct node {
 }Threadnode,*ThreadTree;
 
 //声明函数
-void InThreah();//中序线索化
+void InThread();//中序线索化
 
 //主函数入口
 int main()
