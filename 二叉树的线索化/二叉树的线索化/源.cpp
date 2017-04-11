@@ -67,12 +67,12 @@ void InThread(ThreadTree t, ThreadTree pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ÷Ó
 	if (t != NULL)
 	{
 		InThread(t->lchild, pre);
-		if (t->lchild != NULL)
+		if (t->lchild == NULL)
 		{
 			t->ltag = 1;
 			t->lchild = pre;
 		}
-		if (t->rchild != NULL)
+		if (t->rchild == NULL)
 		{
 			t->rtag = 1;
 		}
