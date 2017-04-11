@@ -3,6 +3,7 @@
 #include<iostream>
 #include<stdlib.h>
 #include<stack>
+#include<queue>
 using namespace std;
 
 //声明数据类型
