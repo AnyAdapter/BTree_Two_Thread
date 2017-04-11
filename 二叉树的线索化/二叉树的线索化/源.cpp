@@ -1,4 +1,5 @@
 //期待你的加入
+//在此调用库堆栈和队列
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -24,5 +25,5 @@ int main()
 //中序线索化
 void InThread(ThreadTree t, ThreadTree pre)
 {
-
+	//待完成
 }
