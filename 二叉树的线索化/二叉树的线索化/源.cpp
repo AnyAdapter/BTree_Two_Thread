@@ -1,7 +1,9 @@
 //期待你的加入
 //在此调用库堆栈和队列
-#include<stdio.h>
+#include<iostream>
 #include<stdlib.h>
+#include<stack>
+using namespace std;
 
 //声明数据类型
 typedef int DataType;
