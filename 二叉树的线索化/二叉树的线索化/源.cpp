@@ -17,11 +17,16 @@ typedef struct node {
 	struct node *lchild, *rchild;
 }Threadnode,*ThreadTree;
 
-//ÉùÃ÷º¯Êı£¨µİ¹éÏßË÷»¯£©
-void PerThread();//ÏÈĞòÏßË÷»¯
-void InThread(ThreadTree t,ThreadTree pre);//ÖĞĞòÏßË÷»¯
-void PosThread();//ºóĞøÏßË÷»¯
 ThreadTree Create_BTree();//´´½¨Ò»¸ö¶ş²æÊ÷£¨±ãÓÚÏßË÷»¯µÄ¶ş²æÊ÷£©
+
+//ÉùÃ÷º¯Êı£¨µİ¹éÏßË÷»¯£©
+void PreThread_1(ThreadTree t,ThreadTree pre);//ÏÈĞòÏßË÷»¯
+void InThread_1(ThreadTree t,ThreadTree pre);//ÖĞĞòÏßË÷»¯
+void PosThread_1(ThreadTree t,ThreadTree pre);//ºóĞøÏßË÷»¯
+//ÏßË÷»¯Ëã·¨£¨·Çµİ¹é£©
+void PreThread_2(ThreadTree t,ThreadTree pre);//ÏÈĞòÏßË÷»¯
+void InThread_2(ThreadTree t, ThreadTree pre);//ÖĞĞòÏßË÷»¯
+void PostThread_2(ThreadTree t,ThreadTree pre);//ºóĞøÏßË÷»¯
 
 //Ö÷º¯ÊıÈë¿Ú
 int main()
@@ -48,6 +53,7 @@ ThreadTree Create_BTree()
 	{
 		t = (Threadnode *)malloc(sizeof(Threadnode));
 		t->data = ch;
+		t->ltag = t->rtag = 0;	//È«²¿³õÊ¼»¯Îª0£¬ÔÚÏßË÷»¯Ê±¼õÉÙĞŞ¸Ä
 		t->lchild = Create_BTree();
 		t->rchild = Create_BTree();
 	}
@@ -56,17 +62,10 @@ ThreadTree Create_BTree()
 
 //ÏßË÷»¯Ëã·¨£¨µİ¹é£©
 //ÏÈĞòÏßË÷»¯
-void PerThread()
+void PreThread_1(ThreadTree t,ThreadTree pre)
 {
-
-}
-
-//ÖĞĞòÏßË÷»¯
-void InThread(ThreadTree t, ThreadTree pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ÷ÓÃÇ°preÎª¿Õ
-{
-	if (t != NULL)
+	if (t)
 	{
-		InThread(t->lchild, pre);
 		if (t->lchild == NULL)
 		{
 			t->ltag = 1;
@@ -81,11 +80,68 @@ void InThread(ThreadTree t, ThreadTree pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ÷Ó
 			pre->rchild = t;
 		}
 		pre = t;
-		InThread(t->rchild, pre);
+		PreThread_1(t->lchild,pre);
+		PreThread_1(t->rchild,pre);
 	}
 }
 
-void PosThread()//ºóĞøÏßË÷»¯
+//ÖĞĞòÏßË÷»¯
+void InThread_1(ThreadTree t, ThreadTree pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ÷ÓÃÇ°preÎª¿Õ
 {
+	if (t != NULL)
+	{
+		InThread_1(t->lchild, pre);
+		if (t->lchild == NULL)
+		{
+			t->ltag = 1;
+			t->lchild = pre;
+		}
+		if (t->rchild == NULL)
+		{
+			t->rtag = 1;
+		}
+		if (pre != NULL && pre->rtag == 1)
+		{
+			pre->rchild = t;
+		}
+		pre = t;
+		InThread_1(t->rchild, pre);
+	}
+}
 
+void PosThread_1(ThreadTree t,ThreadTree pre)//ºóĞøÏßË÷»¯
+{
+	if (t)
+	{
+		PosThread_1(t->lchild, pre);
+		PosThread_1(t->rchild, pre);
+		if (t->lchild == NULL)
+		{
+			t->ltag = 1;
+			t->lchild = pre;
+		}
+		if (t->rchild == NULL)
+		{
+			t->rtag = 1;
+		}
+		if (pre != NULL && pre->rtag == 1)
+		{
+			pre->rchild = t;
+		}
+		pre = t;	
+	}
+}
+
+//ÏßË÷»¯Ëã·¨£¨·Çµİ¹é£©
+void PreThread_2(ThreadTree t, ThreadTree pre)//ÏÈĞòÏßË÷»¯
+{
+	//´ıÍê³É
+}
+void InThread_2(ThreadTree t, ThreadTree pre)//ÖĞĞòÏßË÷»¯
+{
+	//´ıÍê³É
+}
+void PostThread_2(ThreadTree t, ThreadTree pre)//ºóĞøÏßË÷»¯
+{
+	//´ıÍê³É
 }
