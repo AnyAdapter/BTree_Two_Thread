@@ -139,12 +139,69 @@ void PosThread_1(ThreadTree t,ThreadTree pre)//后续线索化
 //线索化算法（非递归）
 void PreThread_2(ThreadTree t, ThreadTree pre)//先序线索化
 {
-
-	//待完成
+	stack<ThreadTree> S;
+	ThreadTree p = t;
+	if (p != NULL || S.empty() != true)
+	{
+		if (p)
+		{
+			if (t->lchild == NULL)
+			{
+				t->ltag = 1;
+				t->lchild = pre;
+			}
+			if (t->rchild == NULL)
+			{
+				t->rtag = 1;
+			}
+			if (pre != NULL && pre->rtag == 1)
+			{
+				pre->rchild = t;
+			}
+			pre = t;
+			S.push(p);
+			p = p->lchild;
+		}
+		else
+		{
+			p = S.top();
+			S.pop();
+			p = p->rchild;
+		}
+	}
 }
 void InThread_2(ThreadTree t, ThreadTree pre)//中序线索化
 {
-	//待完成
+	stack<ThreadTree> S;
+	ThreadTree p = t;
+	if (p != NULL || S.empty() != true)
+	{
+		if (p)
+		{
+			S.push(p);
+			p = p->lchild;
+		}
+		else
+		{
+			p = S.top();
+			S.pop();
+			if (t->lchild == NULL)
+			{
+				t->ltag = 1;
+				t->lchild = pre;
+			}
+			if (t->rchild == NULL)
+			{
+				t->rtag = 1;
+			}
+			if (pre != NULL && pre->rtag == 1)
+			{
+				pre->rchild = t;
+			}
+			pre = t;
+			p = p->rchild;
+		}
+	}
 }
 void PostThread_2(ThreadTree t, ThreadTree pre)//后续线索化
 {
