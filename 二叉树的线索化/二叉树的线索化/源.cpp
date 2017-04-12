@@ -27,7 +27,12 @@ void PosThread_1(ThreadTree t,ThreadTree pre);//ºóĞøÏßË÷»¯
 void PreThread_2(ThreadTree t,ThreadTree pre);//ÏÈĞòÏßË÷»¯
 void InThread_2(ThreadTree t, ThreadTree pre);//ÖĞĞòÏßË÷»¯
 void PostThread_2(ThreadTree t,ThreadTree pre);//ºóĞøÏßË÷»¯
-
+//±éÀúÏßË÷¶ş²æÊ÷µÄ²Ù×÷
+void PreThreadOrder(ThreadTree t);//ÏÈĞò±éÀú
+void InThreadOrder(ThreadTree t);//ÖĞĞò±éÀú
+void PostThreadOrder(ThreadTree t);//ºóĞø±éÀú
+//´¦Àíº¯Êı
+void Visit(DataType t);//·ÃÎÊº¯Êı
 
 //ÉùÃ÷È«¾Ö±äÁ¿Ö¸Õë£¬±ãÓÚ²Ù×÷
 ThreadTree pre;
@@ -75,12 +80,9 @@ void PreThread_1(ThreadTree t,ThreadTree pre)//preÎªÈ«¾ÖÖ¸Õë±äÁ¿
 			t->ltag = 1;
 			t->lchild = pre;
 		}
-		if (t->rchild == NULL)
+		if (pre != NULL && pre->rchild == NULL)
 		{
 			t->rtag = 1;
-		}
-		if (pre != NULL && pre->rtag == 1)
-		{
 			pre->rchild = t;
 		}
 		pre = t;
@@ -100,12 +102,9 @@ void InThread_1(ThreadTree t, ThreadTree pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ
 			t->ltag = 1;
 			t->lchild = pre;
 		}
-		if (t->rchild == NULL)
+		if (pre != NULL && pre->rchild == NULL)
 		{
 			t->rtag = 1;
-		}
-		if (pre != NULL && pre->rtag == 1)
-		{
 			pre->rchild = t;
 		}
 		pre = t;
@@ -124,15 +123,12 @@ void PosThread_1(ThreadTree t,ThreadTree pre)//ºóĞøÏßË÷»¯
 			t->ltag = 1;
 			t->lchild = pre;
 		}
-		if (t->rchild == NULL)
+		if (pre != NULL && pre->rchild == NULL)
 		{
 			t->rtag = 1;
-		}
-		if (pre != NULL && pre->rtag == 1)
-		{
 			pre->rchild = t;
 		}
-		pre = t;	
+		pre = t;
 	}
 }
 
@@ -150,12 +146,9 @@ void PreThread_2(ThreadTree t, ThreadTree pre)//ÏÈĞòÏßË÷»¯
 				t->ltag = 1;
 				t->lchild = pre;
 			}
-			if (t->rchild == NULL)
+			if (pre != NULL && pre->rchild == NULL)
 			{
 				t->rtag = 1;
-			}
-			if (pre != NULL && pre->rtag == 1)
-			{
 				pre->rchild = t;
 			}
 			pre = t;
@@ -190,12 +183,9 @@ void InThread_2(ThreadTree t, ThreadTree pre)//ÖĞĞòÏßË÷»¯
 				t->ltag = 1;
 				t->lchild = pre;
 			}
-			if (t->rchild == NULL)
+			if (pre != NULL && pre->rchild == NULL)
 			{
 				t->rtag = 1;
-			}
-			if (pre != NULL && pre->rtag == 1)
-			{
 				pre->rchild = t;
 			}
 			pre = t;
@@ -206,4 +196,70 @@ void InThread_2(ThreadTree t, ThreadTree pre)//ÖĞĞòÏßË÷»¯
 void PostThread_2(ThreadTree t, ThreadTree pre)//ºóĞøÏßË÷»¯
 {
 	//´ıÍê³É
+}
+
+//±éÀúÏßË÷¶ş²æÊ÷µÄ²Ù×÷
+void PreThreadOrder(ThreadTree t)//ÏÈĞò±éÀú
+{
+	if (t != NULL)
+	{
+		ThreadTree pCur = t;
+		while ( pCur != NULL)
+		{
+			while ( pCur->lchild != NULL && pCur->ltag == 0)//Óöµ½×ó½áµã¾Í·ÃÎÊ
+			{
+				Visit(pCur->data);
+				pCur = pCur->lchild;
+			}
+			//µ½´Ë´¦»¹ÓĞÒ»¸ö½áµãÎ´·ÃÎÊ
+			Visit(pCur->data);
+			if (pCur->ltag == 1)//Óöµ½ÏßË÷¾Í·ÃÎÊÓÒ½áµã
+			{
+				pCur = pCur->rchild;
+			}
+			while (pCur != NULL)
+			{
+				if (pCur->lchild != NULL && pCur->ltag == 0)//Óöµ½×ó½áµã¾Í·ÃÎÊ
+				{
+					break;
+				}
+				Visit(pCur->data);
+				pCur = pCur->rchild;
+			}
+		}
+	}
+}
+
+void InThreadOrder(ThreadTree t)//ÖĞĞò±éÀú
+{
+	if (t != NULL)
+	{
+		ThreadTree pCur = t;
+		while (pCur != NULL)
+		{
+			while (pCur->ltag == 0)	//ÕÒ×î½üµÄ×ó½áµã
+			{
+				pCur = pCur->lchild;
+			}
+			Visit(pCur->data);
+			while (pCur != NULL && pCur->rtag == 1)//ÕÒÖĞĞòºóĞø½áµã
+			{
+				pCur = pCur->rchild;
+				Visit(pCur->data);
+			}
+			//Ã»ÓĞºó¼Ì£¬¼´ÎªÓÒ×ÓÊ÷
+			pCur = pCur->rchild;
+		}
+	}
+}
+
+void PostThreadOrder(ThreadTree t)//ºóĞø±éÀú
+{
+
+}
+
+//·ÃÎÊº¯Êı
+void Visit(DataType t)
+{
+	printf("%c ",t);
 }
