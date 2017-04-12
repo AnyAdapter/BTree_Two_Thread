@@ -28,12 +28,16 @@ void PreThread_2(ThreadTree t,ThreadTree pre);//ÏÈĞòÏßË÷»¯
 void InThread_2(ThreadTree t, ThreadTree pre);//ÖĞĞòÏßË÷»¯
 void PostThread_2(ThreadTree t,ThreadTree pre);//ºóĞøÏßË÷»¯
 
+
+//ÉùÃ÷È«¾Ö±äÁ¿Ö¸Õë£¬±ãÓÚ²Ù×÷
+ThreadTree pre;
+
 //Ö÷º¯ÊıÈë¿Ú
 int main()
 {
 	ThreadTree t;
 	t = Create_BTree();	//	´´½¨Ò»¿Å¶ş²æÊ÷
-	
+	pre = NULL;
 	//ºóĞø²Ù×÷
 
 	return 0;
@@ -62,9 +66,9 @@ ThreadTree Create_BTree()
 
 //ÏßË÷»¯Ëã·¨£¨µİ¹é£©
 //ÏÈĞòÏßË÷»¯
-void PreThread_1(ThreadTree t,ThreadTree pre)
+void PreThread_1(ThreadTree t,ThreadTree pre)//preÎªÈ«¾ÖÖ¸Õë±äÁ¿
 {
-	if (t)
+	if (t != NULL)
 	{
 		if (t->lchild == NULL)
 		{
@@ -111,7 +115,7 @@ void InThread_1(ThreadTree t, ThreadTree pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ
 
 void PosThread_1(ThreadTree t,ThreadTree pre)//ºóĞøÏßË÷»¯
 {
-	if (t)
+	if (t != NULL)
 	{
 		PosThread_1(t->lchild, pre);
 		PosThread_1(t->rchild, pre);
@@ -135,6 +139,7 @@ void PosThread_1(ThreadTree t,ThreadTree pre)//ºóĞøÏßË÷»¯
 //ÏßË÷»¯Ëã·¨£¨·Çµİ¹é£©
 void PreThread_2(ThreadTree t, ThreadTree pre)//ÏÈĞòÏßË÷»¯
 {
+
 	//´ıÍê³É
 }
 void InThread_2(ThreadTree t, ThreadTree pre)//ÖĞĞòÏßË÷»¯
