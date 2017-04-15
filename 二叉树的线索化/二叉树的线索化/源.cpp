@@ -73,7 +73,7 @@ ThreadTree Create_BTree(Threadnode *parent)
 
 //ÏßË÷»¯Ëã·¨£¨µİ¹é£©
 //ÏÈĞòÏßË÷»¯
-void PreThread_1(ThreadTree t,ThreadTree pre)//preÎªÈ«¾ÖÖ¸Õë±äÁ¿
+void PreThread_1(Threadnode *t, Threadnode *pre)//preÎªÈ«¾ÖÖ¸Õë±äÁ¿
 {
 	if (t != NULL)
 	{
@@ -94,7 +94,7 @@ void PreThread_1(ThreadTree t,ThreadTree pre)//preÎªÈ«¾ÖÖ¸Õë±äÁ¿
 }
 
 //ÖĞĞòÏßË÷»¯
-void InThread_1(ThreadTree t, ThreadTree pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ÷ÓÃÇ°preÎª¿Õ
+void InThread_1(Threadnode *t, Threadnode *pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ÷ÓÃÇ°preÎª¿Õ
 {
 	if (t != NULL)
 	{
@@ -114,7 +114,7 @@ void InThread_1(ThreadTree t, ThreadTree pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ
 	}
 }
 
-void PosThread_1(ThreadTree t,ThreadTree pre)//ºóĞøÏßË÷»¯
+void PosThread_1(Threadnode *t, Threadnode *pre)//ºóĞøÏßË÷»¯
 {
 	if (t != NULL)
 	{
@@ -135,7 +135,7 @@ void PosThread_1(ThreadTree t,ThreadTree pre)//ºóĞøÏßË÷»¯
 }
 
 //ÏßË÷»¯Ëã·¨£¨·Çµİ¹é£©
-void PreThread_2(ThreadTree t, ThreadTree pre)//ÏÈĞòÏßË÷»¯
+void PreThread_2(Threadnode *t, Threadnode * pre)//ÏÈĞòÏßË÷»¯
 {
 	stack<ThreadTree> S;
 	ThreadTree p = t;
@@ -166,7 +166,7 @@ void PreThread_2(ThreadTree t, ThreadTree pre)//ÏÈĞòÏßË÷»¯
 	}
 }
 
-void InThread_2(ThreadTree t, ThreadTree pre)//ÖĞĞòÏßË÷»¯
+void InThread_2(Threadnode *t, Threadnode *pre)//ÖĞĞòÏßË÷»¯
 {
 	stack<ThreadTree> S;
 	ThreadTree p = t;
@@ -197,7 +197,7 @@ void InThread_2(ThreadTree t, ThreadTree pre)//ÖĞĞòÏßË÷»¯
 	}
 }
 
-void PostThread_2(ThreadTree t, ThreadTree pre)//ºóĞøÏßË÷»¯
+void PostThread_2(Threadnode *t, Threadnode *pre)//ºóĞøÏßË÷»¯
 {
 	//´ıÍê³É
 }
