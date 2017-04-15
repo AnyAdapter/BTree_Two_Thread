@@ -14,7 +14,7 @@ typedef struct node {
 	int ltag;				//ltag = 0表示该结点指向该结点的左孩子，为 1 时表示指向前驱结点
 	int rtag;				//rtag = 0表示该结点指向该结点的右孩子，为 1 时表示指向后继结点
 	DataType data;
-	struct node *lchild, *rchild;
+	struct node *lchild, *rchild,*parent;
 }Threadnode,*ThreadTree;
 
 ThreadTree Create_BTree();//创建一个二叉树（便于线索化的二叉树）
@@ -41,7 +41,8 @@ ThreadTree pre;
 int main()
 {
 	ThreadTree t;
-	t = Create_BTree();	//	创建一颗二叉树
+	Threadnode *parent = NULL;
+	t = Create_BTree(parent);	//	创建一颗二叉树
 	pre = NULL;
 	//后续操作
 
@@ -49,7 +50,7 @@ int main()
 }
 
 //创建二叉树（递归算法）
-ThreadTree Create_BTree()
+ThreadTree Create_BTree(Threadnode *parent)
 {
 	ThreadTree t;
 	DataType ch;
@@ -61,10 +62,11 @@ ThreadTree Create_BTree()
 	else
 	{
 		t = (Threadnode *)malloc(sizeof(Threadnode));
+		t->parent = parent;
 		t->data = ch;
 		t->ltag = t->rtag = 0;	//全部初始化为0，在线索化时减少修改
-		t->lchild = Create_BTree();
-		t->rchild = Create_BTree();
+		t->lchild = Create_BTree(parent);
+		t->rchild = Create_BTree(parent);
 	}
 	return t;
 }
@@ -141,17 +143,17 @@ void PreThread_2(ThreadTree t, ThreadTree pre)//先序线索化
 	{
 		if (p)
 		{
-			if (t->lchild == NULL)
+			if (p->lchild == NULL)
 			{
-				t->ltag = 1;
-				t->lchild = pre;
+				p->ltag = 1;
+				p->lchild = pre;
 			}
 			if (pre != NULL && pre->rchild == NULL)
 			{
-				t->rtag = 1;
-				pre->rchild = t;
+				p->rtag = 1;
+				pre->rchild = p;
 			}
-			pre = t;
+			pre = p;
 			S.push(p);
 			p = p->lchild;
 		}
@@ -163,6 +165,7 @@ void PreThread_2(ThreadTree t, ThreadTree pre)//先序线索化
 		}
 	}
 }
+
 void InThread_2(ThreadTree t, ThreadTree pre)//中序线索化
 {
 	stack<ThreadTree> S;
@@ -193,6 +196,7 @@ void InThread_2(ThreadTree t, ThreadTree pre)//中序线索化
 		}
 	}
 }
+
 void PostThread_2(ThreadTree t, ThreadTree pre)//后续线索化
 {
 	//待完成
@@ -255,7 +259,46 @@ void InThreadOrder(ThreadTree t)//中序遍历
 
 void PostThreadOrder(ThreadTree t)//后续遍历
 {
+	if (t != NULL)
+	{
+		Threadnode *pCur = t;
+		pre = NULL;
+		while (pCur != NULL)
+		{
+			//第一步：找树最左边的节点  
+			while (pCur->lchild != pre && pCur->ltag == 0) //左子树  
+			{
+				pCur = pCur->lchild;
+			}
+			//循环结束后 pCur== Root 或者为空  
 
+			//第二步：访问后继  
+			while (pCur && pCur->rtag == 1)
+			{
+				Visit(pCur->data);
+				pre = pCur;
+				pCur = pCur->rchild;
+			}
+			//判断此时pCur是不是指向了根节点  
+			if (pCur == t)
+			{
+				Visit(pCur->data);
+				return;
+			}
+			while (pCur && pCur->rchild == pre)
+			{
+				Visit(pCur->data);
+				pre = pCur;
+				pCur = pCur->parent;  //往上一级走  
+			}
+			//这里不能用NULL判断，而是用Rtag  
+			if (pCur && pCur->rtag == 0)
+			{
+				pCur = pCur->rchild;
+			}
+		}
+		//end-while  
+	}
 }
 
 //访问函数
