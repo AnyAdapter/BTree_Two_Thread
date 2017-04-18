@@ -1,55 +1,63 @@
-//ÆÚ´ıÄãµÄ¼ÓÈë
-//ÔÚ´Ëµ÷ÓÃ¿â¶ÑÕ»ºÍ¶ÓÁĞ
 #include<iostream>
 #include<stdlib.h>
 #include<stack>
 #include<queue>
 using namespace std;
 
-//ÉùÃ÷Êı¾İÀàĞÍ
+//å£°æ˜æ•°æ®ç±»å‹
 typedef char DataType;
 
-//ÏßË÷»¯µÄ¶ş²æÊ÷Êı¾İÀàĞÍÉùÃ÷
+//çº¿ç´¢åŒ–çš„äºŒå‰æ ‘æ•°æ®ç±»å‹å£°æ˜
 typedef struct node {
-	int ltag;				//ltag = 0±íÊ¾¸Ã½áµãÖ¸Ïò¸Ã½áµãµÄ×óº¢×Ó£¬Îª 1 Ê±±íÊ¾Ö¸ÏòÇ°Çı½áµã
-	int rtag;				//rtag = 0±íÊ¾¸Ã½áµãÖ¸Ïò¸Ã½áµãµÄÓÒº¢×Ó£¬Îª 1 Ê±±íÊ¾Ö¸Ïòºó¼Ì½áµã
+	int ltag;				//ltag = 0è¡¨ç¤ºè¯¥ç»“ç‚¹æŒ‡å‘è¯¥ç»“ç‚¹çš„å·¦å­©å­ï¼Œä¸º 1 æ—¶è¡¨ç¤ºæŒ‡å‘å‰é©±ç»“ç‚¹
+	int rtag;				//rtag = 0è¡¨ç¤ºè¯¥ç»“ç‚¹æŒ‡å‘è¯¥ç»“ç‚¹çš„å³å­©å­ï¼Œä¸º 1 æ—¶è¡¨ç¤ºæŒ‡å‘åç»§ç»“ç‚¹
 	DataType data;
-	struct node *lchild, *rchild,*parent;
-}Threadnode,*ThreadTree;
+	struct node *lchild, *rchild, *parent;
+}Threadnode, *ThreadTree;
 
-ThreadTree Create_BTree();//´´½¨Ò»¸ö¶ş²æÊ÷£¨±ãÓÚÏßË÷»¯µÄ¶ş²æÊ÷£©
+ThreadTree pre = NULL;
+ThreadTree Create_BTree(Threadnode *parent);//åˆ›å»ºä¸€ä¸ªäºŒå‰æ ‘ï¼ˆä¾¿äºçº¿ç´¢åŒ–çš„äºŒå‰æ ‘ï¼‰
 
-//ÉùÃ÷º¯Êı£¨µİ¹éÏßË÷»¯£©
-void PreThread_1(ThreadTree t,ThreadTree pre);//ÏÈĞòÏßË÷»¯
-void InThread_1(ThreadTree t,ThreadTree pre);//ÖĞĞòÏßË÷»¯
-void PosThread_1(ThreadTree t,ThreadTree pre);//ºóĞøÏßË÷»¯
-//ÏßË÷»¯Ëã·¨£¨·Çµİ¹é£©
-void PreThread_2(ThreadTree t,ThreadTree pre);//ÏÈĞòÏßË÷»¯
-void InThread_2(ThreadTree t, ThreadTree pre);//ÖĞĞòÏßË÷»¯
-void PostThread_2(ThreadTree t,ThreadTree pre);//ºóĞøÏßË÷»¯
-//±éÀúÏßË÷¶ş²æÊ÷µÄ²Ù×÷
-void PreThreadOrder(ThreadTree t);//ÏÈĞò±éÀú
-void InThreadOrder(ThreadTree t);//ÖĞĞò±éÀú
-void PostThreadOrder(ThreadTree t);//ºóĞø±éÀú
-//´¦Àíº¯Êı
-void Visit(DataType t);//·ÃÎÊº¯Êı
+											//å£°æ˜å‡½æ•°ï¼ˆé€’å½’çº¿ç´¢åŒ–ï¼‰
+void PreThread_1(ThreadTree t);//å…ˆåºçº¿ç´¢åŒ–
+void InThread_1(ThreadTree t);//ä¸­åºçº¿ç´¢åŒ–
+void PostThread_1(ThreadTree t);//åç»­çº¿ç´¢åŒ–
+								//çº¿ç´¢åŒ–ç®—æ³•ï¼ˆéé€’å½’ï¼‰
+void PreThread_2(ThreadTree t);//å…ˆåºçº¿ç´¢åŒ–
+void InThread_2(ThreadTree t);//ä¸­åºçº¿ç´¢åŒ–
+void PostThread_2(ThreadTree t);//åç»­çº¿ç´¢åŒ–
+								//éå†çº¿ç´¢äºŒå‰æ ‘çš„æ“ä½œ
+void PreThreadOrder(ThreadTree t);//å…ˆåºéå†
+void InThreadOrder(ThreadTree t);//ä¸­åºéå†
+void PostThreadOrder(ThreadTree t);//åç»­éå†
+								   //å¤„ç†å‡½æ•°
+void Visit(DataType t);//è®¿é—®å‡½æ•°
 
-//ÉùÃ÷È«¾Ö±äÁ¿Ö¸Õë£¬±ãÓÚ²Ù×÷
-ThreadTree pre;
+void InOrder_1(ThreadTree t)//å…ˆåºéå†
+{
+	if (t != NULL)
+	{
 
-//Ö÷º¯ÊıÈë¿Ú
+		InOrder_1(t->lchild);
+		Visit(t->data);
+		printf("%d\t%d\n", t->ltag, t->rtag);
+		InOrder_1(t->rchild);
+	}
+}
+//ä¸»å‡½æ•°å…¥å£
 int main()
 {
 	ThreadTree t;
 	Threadnode *parent = NULL;
-	t = Create_BTree(parent);	//	´´½¨Ò»¿Å¶ş²æÊ÷
 	pre = NULL;
-	//ºóĞø²Ù×÷
-
+	t = Create_BTree(parent);	//	åˆ›å»ºä¸€é¢—äºŒå‰æ ‘
+	InOrder_1(t);
+	InThread_1(t);
+	InThreadOrder(t);
 	return 0;
 }
 
-//´´½¨¶ş²æÊ÷£¨µİ¹éËã·¨£©
+//åˆ›å»ºäºŒå‰æ ‘ï¼ˆé€’å½’ç®—æ³•ï¼‰
 ThreadTree Create_BTree(Threadnode *parent)
 {
 	ThreadTree t;
@@ -63,17 +71,18 @@ ThreadTree Create_BTree(Threadnode *parent)
 	{
 		t = (Threadnode *)malloc(sizeof(Threadnode));
 		t->parent = parent;
+		parent = t;
 		t->data = ch;
-		t->ltag = t->rtag = 0;	//È«²¿³õÊ¼»¯Îª0£¬ÔÚÏßË÷»¯Ê±¼õÉÙĞŞ¸Ä
+		t->ltag = t->rtag = 0;	//å…¨éƒ¨åˆå§‹åŒ–ä¸º0ï¼Œåœ¨çº¿ç´¢åŒ–æ—¶å‡å°‘ä¿®æ”¹
 		t->lchild = Create_BTree(parent);
 		t->rchild = Create_BTree(parent);
 	}
 	return t;
 }
 
-//ÏßË÷»¯Ëã·¨£¨µİ¹é£©
-//ÏÈĞòÏßË÷»¯
-void PreThread_1(Threadnode *t, Threadnode *pre)//preÎªÈ«¾ÖÖ¸Õë±äÁ¿
+//çº¿ç´¢åŒ–ç®—æ³•ï¼ˆé€’å½’ï¼‰
+//å…ˆåºçº¿ç´¢åŒ–
+void PreThread_1(ThreadTree t)//preä¸ºå…¨å±€æŒ‡é’ˆå˜é‡
 {
 	if (t != NULL)
 	{
@@ -82,60 +91,60 @@ void PreThread_1(Threadnode *t, Threadnode *pre)//preÎªÈ«¾ÖÖ¸Õë±äÁ¿
 			t->ltag = 1;
 			t->lchild = pre;
 		}
-		if (pre != NULL && pre->rchild == NULL)
+		if (t->rchild == NULL) t->rtag = 1;
+		if (pre != NULL && pre->rtag == 1)
 		{
-			t->rtag = 1;
 			pre->rchild = t;
 		}
 		pre = t;
-		PreThread_1(t->lchild,pre);
-		PreThread_1(t->rchild,pre);
+		PreThread_1(t->lchild);
+		PreThread_1(t->rchild);
 	}
 }
 
-//ÖĞĞòÏßË÷»¯
-void InThread_1(Threadnode *t, Threadnode *pre)//Ö¸Õë±äÁ¿preÖ¸Ïòt½áµãµÄÇ°Çı£¬º¯Êıµ÷ÓÃÇ°preÎª¿Õ
+//ä¸­åºçº¿ç´¢åŒ–
+void InThread_1(ThreadTree t)//æŒ‡é’ˆå˜é‡preæŒ‡å‘tç»“ç‚¹çš„å‰é©±ï¼Œå‡½æ•°è°ƒç”¨å‰preä¸ºç©º
 {
 	if (t != NULL)
 	{
-		InThread_1(t->lchild, pre);
+		InThread_1(t->lchild);
 		if (t->lchild == NULL)
 		{
 			t->ltag = 1;
 			t->lchild = pre;
 		}
-		if (pre != NULL && pre->rchild == NULL)
+		if (t->rchild == NULL) t->rtag = 1;
+		if (pre != NULL && pre->rtag == 1)
 		{
-			t->rtag = 1;
 			pre->rchild = t;
 		}
 		pre = t;
-		InThread_1(t->rchild, pre);
+		InThread_1(t->rchild);
 	}
 }
 
-void PosThread_1(Threadnode *t, Threadnode *pre)//ºóĞøÏßË÷»¯
+void PostThread_1(ThreadTree t)//åç»­çº¿ç´¢åŒ–
 {
 	if (t != NULL)
 	{
-		PosThread_1(t->lchild, pre);
-		PosThread_1(t->rchild, pre);
+		PostThread_1(t->lchild);
+		PostThread_1(t->rchild);
 		if (t->lchild == NULL)
 		{
 			t->ltag = 1;
 			t->lchild = pre;
 		}
-		if (pre != NULL && pre->rchild == NULL)
+		if (t->rchild == NULL) t->rtag = 1;
+		if (pre != NULL && pre->rtag == 1)
 		{
-			t->rtag = 1;
 			pre->rchild = t;
 		}
 		pre = t;
 	}
 }
 
-//ÏßË÷»¯Ëã·¨£¨·Çµİ¹é£©
-void PreThread_2(Threadnode *t, Threadnode * pre)//ÏÈĞòÏßË÷»¯
+//çº¿ç´¢åŒ–ç®—æ³•ï¼ˆéé€’å½’ï¼‰
+void PreThread_2(Threadnode *t)//å…ˆåºçº¿ç´¢åŒ–
 {
 	stack<ThreadTree> S;
 	ThreadTree p = t;
@@ -148,7 +157,7 @@ void PreThread_2(Threadnode *t, Threadnode * pre)//ÏÈĞòÏßË÷»¯
 				p->ltag = 1;
 				p->lchild = pre;
 			}
-			if (pre != NULL && pre->rchild == NULL)
+			if (pre != NULL && p->rchild == NULL)
 			{
 				p->rtag = 1;
 				pre->rchild = p;
@@ -166,7 +175,7 @@ void PreThread_2(Threadnode *t, Threadnode * pre)//ÏÈĞòÏßË÷»¯
 	}
 }
 
-void InThread_2(Threadnode *t, Threadnode *pre)//ÖĞĞòÏßË÷»¯
+void InThread_2(Threadnode *t)//ä¸­åºçº¿ç´¢åŒ–
 {
 	stack<ThreadTree> S;
 	ThreadTree p = t;
@@ -186,7 +195,7 @@ void InThread_2(Threadnode *t, Threadnode *pre)//ÖĞĞòÏßË÷»¯
 				t->ltag = 1;
 				t->lchild = pre;
 			}
-			if (pre != NULL && pre->rchild == NULL)
+			if (pre != NULL && p->rchild == NULL)
 			{
 				t->rtag = 1;
 				pre->rchild = t;
@@ -197,67 +206,74 @@ void InThread_2(Threadnode *t, Threadnode *pre)//ÖĞĞòÏßË÷»¯
 	}
 }
 
-void PostThread_2(Threadnode *t, Threadnode *pre)//ºóĞøÏßË÷»¯
+void PostThread_2(Threadnode *t)//åç»­çº¿ç´¢åŒ–
 {
-	//´ıÍê³É
+	//å¾…å®Œæˆ
 }
 
-//±éÀúÏßË÷¶ş²æÊ÷µÄ²Ù×÷
-void PreThreadOrder(ThreadTree t)//ÏÈĞò±éÀú
+//éå†çº¿ç´¢äºŒå‰æ ‘çš„æ“ä½œ
+void PreThreadOrder(ThreadTree t)//å…ˆåºéå†
 {
 	if (t != NULL)
 	{
-		ThreadTree pCur = t;
-		while ( pCur != NULL)
+		Threadnode * pCur = t;
+		while (pCur != NULL)
 		{
-			while ( pCur->lchild != NULL && pCur->ltag == 0)//Óöµ½×ó½áµã¾Í·ÃÎÊ
+			while (pCur->lchild != NULL && pCur->ltag == 0)//é‡åˆ°å·¦ç»“ç‚¹å°±è®¿é—®
 			{
-				Visit(pCur->data);
+				if (pCur != NULL)
+					Visit(pCur->data);
 				pCur = pCur->lchild;
 			}
-			//µ½´Ë´¦»¹ÓĞÒ»¸ö½áµãÎ´·ÃÎÊ
-			Visit(pCur->data);
-			if (pCur->ltag == 1)//Óöµ½ÏßË÷¾Í·ÃÎÊÓÒ½áµã
+			//åˆ°æ­¤å¤„è¿˜æœ‰ä¸€ä¸ªç»“ç‚¹æœªè®¿é—®
+			if (pCur != NULL)
+				Visit(pCur->data);
+			if (pCur->ltag == 1)//é‡åˆ°çº¿ç´¢å°±è®¿é—®å³ç»“ç‚¹
 			{
-				pCur = pCur->rchild;
+				if (pCur != NULL)
+					pCur = pCur->rchild;
 			}
 			while (pCur != NULL)
 			{
-				if (pCur->lchild != NULL && pCur->ltag == 0)//Óöµ½×ó½áµã¾Í·ÃÎÊ
+				if (pCur->lchild != NULL && pCur->ltag == 0)//é‡åˆ°å·¦ç»“ç‚¹å°±è®¿é—®
 				{
 					break;
 				}
-				Visit(pCur->data);
+				if (pCur != NULL)
+					Visit(pCur->data);
 				pCur = pCur->rchild;
 			}
 		}
 	}
 }
 
-void InThreadOrder(ThreadTree t)//ÖĞĞò±éÀú
+void InThreadOrder(ThreadTree t)//ä¸­åºçº¿ç´¢åŒ–éå†
 {
-	if (t != NULL)
+	if (t == NULL)
 	{
-		ThreadTree pCur = t;
-		while (pCur != NULL)
+		return;
+	}
+	Threadnode * pCur = t;
+	while (pCur != NULL)
+	{
+		while (pCur != NULL && pCur->ltag == 0)	//æ‰¾æœ€è¿‘çš„å·¦ç»“ç‚¹
 		{
-			while (pCur->ltag == 0)	//ÕÒ×î½üµÄ×ó½áµã
-			{
-				pCur = pCur->lchild;
-			}
-			Visit(pCur->data);
-			while (pCur != NULL && pCur->rtag == 1)//ÕÒÖĞĞòºóĞø½áµã
-			{
-				pCur = pCur->rchild;
-				Visit(pCur->data);
-			}
-			//Ã»ÓĞºó¼Ì£¬¼´ÎªÓÒ×ÓÊ÷
-			pCur = pCur->rchild;
+			pCur = pCur->lchild;
 		}
+		if (pCur != NULL) Visit(pCur->data);
+		while (pCur != NULL && pCur->rtag == 1)//æ‰¾ä¸­åºåç»­ç»“ç‚¹
+		{
+			pCur = pCur->rchild;
+			if (pCur != NULL)
+				Visit(pCur->data);
+		}
+		if (pCur != NULL)
+			//æ²¡æœ‰åç»§ï¼Œå³ä¸ºå³å­æ ‘
+			pCur = pCur->rchild;
 	}
 }
 
-void PostThreadOrder(ThreadTree t)//ºóĞø±éÀú
+void PostThreadOrder(ThreadTree t)//åç»­éå†
 {
 	if (t != NULL)
 	{
@@ -265,33 +281,36 @@ void PostThreadOrder(ThreadTree t)//ºóĞø±éÀú
 		pre = NULL;
 		while (pCur != NULL)
 		{
-			//µÚÒ»²½£ºÕÒÊ÷×î×ó±ßµÄ½Úµã  
-			while (pCur->lchild != pre && pCur->ltag == 0) //×ó×ÓÊ÷  
+			//ç¬¬ä¸€æ­¥ï¼šæ‰¾æ ‘æœ€å·¦è¾¹çš„èŠ‚ç‚¹  
+			while (pCur->lchild != pre && pCur->ltag == 0) //å·¦å­æ ‘  
 			{
 				pCur = pCur->lchild;
 			}
-			//Ñ­»·½áÊøºó pCur== Root »òÕßÎª¿Õ  
+			//å¾ªç¯ç»“æŸå pCur== Root æˆ–è€…ä¸ºç©º  
 
-			//µÚ¶ş²½£º·ÃÎÊºó¼Ì  
+			//ç¬¬äºŒæ­¥ï¼šè®¿é—®åç»§  
 			while (pCur && pCur->rtag == 1)
 			{
-				Visit(pCur->data);
+				if (pCur != NULL)
+					Visit(pCur->data);
 				pre = pCur;
 				pCur = pCur->rchild;
 			}
-			//ÅĞ¶Ï´ËÊ±pCurÊÇ²»ÊÇÖ¸ÏòÁË¸ù½Úµã  
+			//åˆ¤æ–­æ­¤æ—¶pCuræ˜¯ä¸æ˜¯æŒ‡å‘äº†æ ¹èŠ‚ç‚¹  
 			if (pCur == t)
 			{
-				Visit(pCur->data);
+				if (pCur != NULL)
+					Visit(pCur->data);
 				return;
 			}
 			while (pCur && pCur->rchild == pre)
 			{
-				Visit(pCur->data);
+				if (pCur != NULL)
+					Visit(pCur->data);
 				pre = pCur;
-				pCur = pCur->parent;  //ÍùÉÏÒ»¼¶×ß  
+				pCur = pCur->parent;  //å¾€ä¸Šä¸€çº§èµ°  
 			}
-			//ÕâÀï²»ÄÜÓÃNULLÅĞ¶Ï£¬¶øÊÇÓÃRtag  
+			//è¿™é‡Œä¸èƒ½ç”¨NULLåˆ¤æ–­ï¼Œè€Œæ˜¯ç”¨Rtag  
 			if (pCur && pCur->rtag == 0)
 			{
 				pCur = pCur->rchild;
@@ -301,8 +320,8 @@ void PostThreadOrder(ThreadTree t)//ºóĞø±éÀú
 	}
 }
 
-//·ÃÎÊº¯Êı
-void Visit(DataType t)
+//è®¿é—®å‡½æ•°
+void Visit(DataType data)
 {
-	printf("%c ",t);
+	printf("%c ", data);
 }
